@@ -170,17 +170,6 @@ inline static void  interpolate(
         )
 {
 
-        //std::cerr<<"In base case"<<std::endl;
-
-      /*  std::cerr<<"ceils"<<std::endl;
-        for(int i =0 ;  i < DIMENSIONS; i++)
-            std::cerr<<ceils[i]<<", ";
-        std::cerr<<std::endl;
-*/
-        //std::cerr<<"floors"<<std::endl;
-        //for(int i =0 ;  i < DIMENSIONS; i++)
-         //   std::cerr<<floors[i]<<", ";
-        //std::cerr<<std::endl;
 
         std::array<std::size_t,DIMENSIONS+1> leftCoords;
 
@@ -201,17 +190,8 @@ inline static void  interpolate(
 
         }
 
-//       std::cerr<<"setting coords done"<<std::endl;
-
-     // std::cerr<<"elements : "<<img.numElements()<<std::endl;
-     // std::cerr<<"coords are: ";
-     // for(int i =0 ;  i < DIMENSIONS+1; i++)
-     //   std::cerr<<leftCoords[i]<<", ";
-     // std::cerr<<std::endl;
 
        interpolatePixel( rval, &(img(leftCoords)), &(img(rightCoords)), channels, fracts[0]);
-
-  //     std::cerr<<"Interpolation done"<<std::endl;
 
 
 }
@@ -243,7 +223,6 @@ if(fracts[0]){
         leftCoords[1] = floors[0];
         rightCoords[1] = ceils[0];
 
-        ///\todo unroll?
         for(std::size_t d = 1; d < DIMENSIONS; d++){
 
             bool isCeil = (FLAGS & (1u<<d) );
@@ -262,7 +241,6 @@ if(fracts[0]){
         coords[0]=0;
         coords[1] = floors[0];
 
-        ///\todo unroll?
         for(std::size_t d = 1; d < DIMENSIONS; d++){
 
             bool isCeil = (FLAGS & (1u<<d) );
@@ -274,7 +252,6 @@ if(fracts[0]){
 
      const DATATYPE* ptr = &(img(coords));
 
-    ///\todo copyPixel function
     for(std::size_t i = 0; i< img.getDimensions()[0]; i++){
 
         rval[i] = ptr[i];
