@@ -20,6 +20,7 @@ using Image = MultidimensionalArray<DATATYPE, DIMENSIONS + 1, BUFFER_TYPE>; ///f
 typedef Image<unsigned char,2> LDRImage;
 typedef Image<float,2> HDRImage;
 typedef Image<float,2> FloatImage;
+typedef Image<double,2> DoubleImage;
 
 template <class DATATYPE>
 using Image2D = Image<DATATYPE, 2>;
@@ -33,9 +34,17 @@ LDRImage loadImage(const std::string& filename,int convertToChannels=0);
 
 bool writeImage(const LDRImage& img, const std::string& filename);
 
-bool writeHDRImage(const HDRImage& img, const std::string& filename);
+bool writeHDRImage(HDRImage& img, const std::string& filename);
 
 HDRImage loadHDRImage(const std::string& filename, int convertToChannels=0);
+
+
+template<class DATATYPE>
+Image2D<DATATYPE> transpose(const Image2D<DATATYPE>& img);
+
+
+template<class DATATYPE>
+void transpose(Image2D<DATATYPE>& outImg, const Image2D<DATATYPE>& inImg);
 
 
 template<class DATATYPE>

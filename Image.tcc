@@ -130,7 +130,58 @@ void flipVertical(Image2D<DATATYPE>& img){
 }
 
 
+template<class DATATYPE>
+Image2D<DATATYPE> transpose(const Image2D<DATATYPE>& img)
+{
+    
+    typename Image2D<DATATYPE>::index_type newDims = img.getDimensions();
+    std::swap(newDims[1], newDims[2]);
+    
+    Image2D<DATATYPE> rval(newDims);
+    
+    transpose(rval, img);
 
+    return rval;
+}
+
+template<class DATATYPE>
+void transpose(Image2D<DATATYPE>& outImg, const Image2D<DATATYPE>& inImg)
+{
+    auto outDims = outImg.getDimensions();
+    auto inDims = inImg.getDimensions();
+    
+    if(outDims[0] != inDims[0])
+    {
+        throw std::runtime_error("Image transpose, channel count mismatch");
+    }
+    
+    if((outDims[1] != inDims[2]) || (outDims[2] != inDims[1]))
+    {
+        throw std::runtime_error("Width / height mismatch for image transpose");
+    }
+    
+    for(std::size_t y = 0; y < outDims[2]; y++)
+    {
+        for(std::size_t x = 0; x < outDims[1]; x++)
+        {
+            
+            for(std::size_t ch = 0; ch < outDims[0]; ch++)
+            {
+
+                typename Image2D<DATATYPE>::index_type outIndex = {{ch, x, y}};
+                typename Image2D<DATATYPE>::index_type inIndex = {{ch, y, x}};
+
+                //std::cout<<linearizeMultidimensionalIndex(inIndex, outImg.getDimensions())<<std::endl;
+                //outImg[linearizeMultidimensionalIndex(outIndex, outDims)] =
+                //inImg[linearizeMultidimensionalIndex(inIndex, inDims)];
+                
+
+                outImg(outIndex) = inImg(inIndex);
+            }
+        }
+    }
+    
+}
 
 
 template<class DATATYPE>

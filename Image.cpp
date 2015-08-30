@@ -86,11 +86,32 @@ HDRImage loadHDRImage(const std::string& filename, int convertToChannels)
 
 
 
-bool writeHDRImage(const HDRImage& img, const std::string& filename)
+bool writeHDRImage(HDRImage& img, const std::string& filename)
 {
-    ///\todo implement
-    throw std::runtime_error("HDR IMAGE WRITER NOT IMPLEMENTED");
-
+    if(!img)
+    {
+        throw std::runtime_error("Image::Write called on incomplete image");
+    }
+    
+    std::string extension = filename.substr(filename.length()-4, 4);
+    
+    int width =img.getDimensions()[1];
+    int height=img.getDimensions()[2];
+    int channels=img.getDimensions()[0];
+    
+    for(int i =0; i < img.numElements(); i++)
+    {
+        img[i] = std::max<float>(0.0, img[i]);
+    }
+    
+    //special case branching... mostly becuase jpeg doens't write with this writer.  This allows autodetection of the extension regardless though.
+    
+    if(extension != ".hdr")
+    {
+        throw std::runtime_error("Unrecognized extension for writeHDRImage");
+    }
+    
+    return stbi_write_hdr(filename.c_str(), width, height, channels, img.dataPtr());
 }
 
 
